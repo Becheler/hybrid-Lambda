@@ -24,7 +24,7 @@ add_test(
 
 add_test(
   NAME test_seed_num_and_output
-  COMMAND ${PROJECT_BINARY_DIR}/app/hybridlambda-spcu "((1:1,2:1):1,3:2);" -num 3 -seed 2 -o example1
+  COMMAND ${PROJECT_BINARY_DIR}/app/hybridlambda -spcu "((1:1,2:1):1,3:2);" -num 3 -seed 2 -o example1
 )
 
 add_test(
