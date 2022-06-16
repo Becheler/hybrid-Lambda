@@ -96,7 +96,6 @@ add_test(
 ### UNIT TEST
 ###############################################################################
 
-
 # Keep test files in a separate source directory called unit_test
 file(GLOB TEST_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} unit_test/*.cpp)
 
