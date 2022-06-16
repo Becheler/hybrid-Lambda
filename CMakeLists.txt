@@ -27,7 +27,7 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 
 find_package(Boost 1.71 REQUIRED COMPONENTS program_options serialization unit_test_framework)
 
-add_subdirectory(src)
+add_subdirectory(app)
 
 add_subdirectory(doc)
 

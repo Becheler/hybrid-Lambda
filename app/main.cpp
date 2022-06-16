@@ -3,9 +3,11 @@
 //
 
 #include <boost/program_options.hpp>
+#include <exception>
+
 #include "options.h"
 #include "utils.h"
-#include "hybridLambda.hpp"
+// #include "hybridLambda.hpp"
 
 namespace bpo = boost::program_options;
 
@@ -49,29 +51,29 @@ int main(int argc, char* argv[])
   if (vm.count("verbose"))
   {
     verbose = true;
-    hybrid_lambda::utils::PrintVariableMap(vm);
+    app::utils::PrintVariableMap(vm);
   }
 
   if(verbose){ std::cout << "Initialization" << std::endl; }
 
-  HybridLambda run_hybridLambda (vm, verbose);
+  // HybridLambda run_hybridLambda (vm, verbose);
 
   if(verbose){ std::cout << "Running ..." << std::endl; }
 
   try
   {
-    run_hybridLambda.HybridLambda_core( );
-    run_hybridLambda.create_site_data_dir();
+    // run_hybridLambda.HybridLambda_core( );
+    // run_hybridLambda.create_site_data_dir();
 
     if(verbose){ std::cout << "Segregating site data were generated ..." << std::endl; }
 
-    run_hybridLambda.extract_tmrca ();
-    run_hybridLambda.extract_bl ();
-    run_hybridLambda.extract_firstcoal();
-    run_hybridLambda.extract_frequency();
+    // run_hybridLambda.extract_tmrca ();
+    // run_hybridLambda.extract_bl ();
+    // run_hybridLambda.extract_firstcoal();
+    // run_hybridLambda.extract_frequency();
   }
 
-  catch (const exception &e)
+  catch (const std::exception &e)
   {
     std::cerr << "Error: " << e.what() << std::endl;
     return 1;

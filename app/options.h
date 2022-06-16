@@ -35,42 +35,46 @@ auto handle_options(int argc, char* argv[])
   ("config", bpo::value<std::string>()->required(), "configuration file")
   ;
   // Allowed both on command line and in config file
-  bpo::options_description general_options{"Model parameters"};
+  bpo::options_description model_options{"Model parameters"};
   model_options.add_options()
   ("spcu", bpo::value<std::string>(), "Input the species network/tree string through command line or a file. Branch lengths of the INPUT are in coalescent unit.")
   ("spng", bpo::value<std::string>(), "Input the species network/tree string through command line or a file. Branch lengths of the INPUT are in number of generation.")
-  ("pop", bpo::value<double>()->default_value(10000), "Population sizes are defined by a single numerical constant,or a string which specifies the population size on each branch. The string can be input through command line or a file. By default, population size 10,000 is used.")
+  ("pop", bpo::value<double>()->default_value(10000), "Population sizes are defined by a single numerical constant,or a string which specifies thebpopulation size on each branch. The string can be input through command line or a file. By default, population size 10,000 is used.")
   ("mm", bpo::value<int>(), "Multiple merger parameters are defined by a single numerical constant. or a string which speifies the parameter on each branch. The string can be input through command line or a file. By default, Kingman coalescent is used.")
-  ("S", po::value<std::vector<int> >()->multitoken(), "Specify the number of samples for each taxon.")
+  ("S",bpo::value<std::vector<int> >()->multitoken(), "Specify the number of samples for each taxon.")
   ("num", bpo::value<int>(), "The number of gene trees will be simulated.")
   ("seed", bpo::value<int>(), "User define random SEED.")
   ("mu", bpo::value<double>()->default_value(0.00005), "User defined constant mutation rate per locus. By default mutation rate 0.00005 is used.")
   ("output,o", bpo::value<std::string>()->default_value("OUT"), "Specify the file name prefix for simulated gene trees. Prefix is set as \"OUT\" by default.")
+
+  // Flags
   // When options are not specified, only output trees with branch lengths are in coalescent unit.
-  ("sim_mut_unit", bpo::bool_switch(&sim_mut_unit_flag), "Convert the simulated gene tree branch lengths to mutation unit.")
-  ("sim_num_gener", bpo::bool_switch(&sim_num_gener_flag), "Convert the simulated gene tree branch lengths to number of generations.")
-  ("sim_num_mut", bpo::bool_switch(&sim_num_mut_flag), "Simulate numbers of mutations on each branch of simulated gene trees.")
-  ("sim_Si_num", bpo::bool_switch(&sim_Si_num_flag), "Generate a table, which includes the number of segregating sites and the total branch length of the gene tree, as well as the TMRCA.")
-  ("f", bpo::bool_switch(&f_flag), "Generate a topology frequency table of a set of input trees or simulated gene trees.")
+  ("sim_mut_unit", "Convert the simulated gene tree branch lengths to mutation unit.")
+  ("sim_num_gener", "Convert the simulated gene tree branch lengths to number of generations.")
+  ("sim_num_mut", "Simulate numbers of mutations on each branch of simulated gene trees.")
+  ("sim_Si_num", "Generate a table, which includes the number of segregating sites and the total branch length of the gene tree, as well as the TMRCA.")
+  //
+  ("f", "Generate a topology frequency table of a set of input trees or simulated gene trees.")
   ("gt", bpo::value<std::string>(), "Specify the FILE NAME of trees to analyse tree topology frequencies.")
-  ("seg", bpo::value<std::string>(), "Generate segregating site data.")
+  //
+  ("seg", "Generate segregating site data.")
   ("mt", bpo::value<std::string>(), "Specify the FILE NAME of trees to generate segregating site data.")
   // Tree branch lengths indicate number of mutations on the branch.
-  ("mono", bpo::value<std::string>(), "Generate a frequency table of monophyletic, paraphyletic and polyphyletic trees.")
+  ("mono", "Generate a frequency table of monophyletic, paraphyletic and polyphyletic trees.")
   ("spcu", bpo::value<std::string>(), "Input the species network/tree string through command line or a file. Branch lengths of the INPUT are in coalescent unit.")
   ;
   //
   bpo::options_description plot_options{"Plotting options"};
   plot_options.add_options()
-  ("plot", bpo::bool_switch(&plot_flag), "Use LaTEX(-plot) to draw the input (defined by -spcu) network(tree).")
-  ("dot", bpo::bool_switch(&dot_flag), "Use Dot (-dot) to draw the input (defined by -spcu) network(tree).")
-  ("branch", bpo::bool_switch(&dot_flag), "Branch lengths will be labelled in the figure.")
+  ("plot", "Use LaTEX(-plot) to draw the input (defined by -spcu) network(tree).")
+  ("dot", "Use Dot (-dot) to draw the input (defined by -spcu) network(tree).")
+  ("branch", "Branch lengths will be labelled in the figure.")
 ;
   bpo::options_description command_line_options;
-  command_line_options.add(generic_options).add(general_options).add(plot_options);
+  command_line_options.add(generic_options).add(model_options).add(plot_options);
 
   bpo::options_description file_options{"General options (command line values will overwrite config file values)"};
-  file_options.add(general_options).add(model_options).add(other_options);
+  file_options.add(model_options).add(plot_options);
 
   bpo::variables_map vm;
 
@@ -80,7 +84,6 @@ auto handle_options(int argc, char* argv[])
     bpo::store(
       bpo::command_line_parser(argc, argv).
       options(command_line_options).
-      positional(positional_options).
       run(), vm); // can throw
 
     // --help option
