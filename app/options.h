@@ -67,6 +67,7 @@ auto handle_options(int argc, char* argv[])
   ("plot", "Use LaTEX(-plot) to draw the input (defined by -spcu) network(tree).")
   ("dot", "Use Dot (-dot) to draw the input (defined by -spcu) network(tree).")
   ("branch", "Branch lengths will be labelled in the figure.")
+  ("print", "Print tree.")
 ;
   bpo::options_description command_line_options;
   command_line_options.add(generic_options).add(model_options).add(plot_options);
