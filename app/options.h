@@ -1,5 +1,5 @@
 
-// Copyright 2020 Arnaud Becheler    <arnaud.becheler@gmail.com>
+// Copyright 2022 Arnaud Becheler    <arnaud.becheler@gmail.com>
 
 /***********************************************************************                                                                         *
 * This program is free software; you can redistribute it and/or modify *
@@ -26,9 +26,7 @@ namespace bpo = boost::program_options;
 ///
 auto handle_options(int argc, char* argv[])
 {
-  ///
-  /// @brief Declare a group of options that will be allowed only on command line
-  ///
+  // Declare a group of options that will be allowed only on command line
   bpo::options_description generic_options{"Command-line-only options"};
   generic_options.add_options()
   ("help,h", "help screen")
@@ -36,175 +34,43 @@ auto handle_options(int argc, char* argv[])
   ("version", "software version")
   ("config", bpo::value<std::string>()->required(), "configuration file")
   ;
-
-  ///
-  /// @brief Declare a simpler way to call on command line
-  ///
-  bpo::positional_options_description positional_options;
-  positional_options.add("config", 1);
-
-  ///
-  /// @brief File paths options for file dependencies
-  ///
-  /// \todo if we get user to provide all variables in one config file do we need these files? Obviously we keep SPICE and TLE but what about others?
-  ///
-  bpo::options_description dependencies_options("Dependencies Options");
-  dependencies_options.add_options()
-  	//
-  	("SPICE_file_path", bpo::value<std::string>(), "Path to user SPICE installation")
-  	//
-  	("thrust_file_path", bpo::value<std::string>(), "path to user's thrust file")
-  	//
-  	("solar_power_file_name", bpo::value<std::string>(), "name of OpenGL solar power file")
-  	//
-  	("surface_geometry_file_name", bpo::value<std::string>(), "name of surface geometry file")
-  	//
-  	("TLE_constellation_file_name", bpo::value<std::string>(), "name of TLE constellation GPS file")
-  	//
-  	("Kalman_file_name", bpo::value<std::string>(), "name of Kalman filtering file");
-
-  ///
-  /// @brief Density MOD options
-  ///
-  bpo::options_description density_options("Density MOD Options");
-  density_options.add_options()
-  	//
-  	("density_mod", bpo::value<double>(), "desired density mod")
-  	//
-  	("density_mod_amplitude", bpo::value<double>(), "density mod amplitude")
-  	//
-  	("density_mod_phase", bpo::value<double>(), "density mod phase");
-
-  ///
-  /// @brief Time options
-  ///
-  bpo::options_description time_options("Time Options");
-  time_options.add_options()
-  	//
-  	("initial_epoch", bpo::value<std::string>(), "initial epoch in UTC format DD-MM-YYYY HH:MM:SS")
-  	//
-  	("final_epoch", bpo::value<std::string>(), "final epoch in UTC format DD-MM-YYYY HH:MM:SS")
-  	// TODO what units is timestep in? does it need to be given in UTC?
-  	("timestep", bpo::value<float>(), "timestep");
-
-  ///
-  /// @brief Spacecraft options
-  ///
-  /// \todo unfinished
-  ///
-  /// \todo why isn't right ascention included in original code as an option?
-  ///
-  /// \todo ask if we want pos and veloc provided in ECEF or ECI by user (it shouldn't matter which we just need a default)
-  ///
-  bpo::options_description spacecraft_options("Spacecraft Options");
-  spacecraft_options.add_options()
-  	//
-  	("num_spacecraft", bpo::value<int>()->default_value(1), "number of spacecraft being modelled")
-  	//
-  	("name", bpo::value<std::vector<std::string> >(), "names of each spacecraft in vector")
-  	//
-  	("num_GPS spacecraft", bpo::value<int>()->default_value(0), "number of spacecraft using GPS")
-  	//
-  	("num_surfaces", bpo::value<int>(), "number of surfaces on each spacecraft (must be same # for all SC)")
-  	//
-  	("solar_cell_efficiency", bpo::value<std::vector<double> >(), "efficiency of solar cells on spacecraft")
-  	//
-  	("inclination", bpo::value<std::vector<double> >(), "inclinations of spacecraft in vector of len=num spacecraft")
-  	//
-  	("eccentricity", bpo::value<std::vector<double> >(), "eccentricity of all spacecraft in vector of len=num spacecraft")
-  	//
-  	("apogee_altitude", bpo::value<std::vector<double> >(), "apogee altitude of all spacecraft in vector")
-  	//
-  	("true_anomaly", bpo::value<std::vector<double> >(), "true anomalies of all spacecraft in vector")
-  	//
-  	("arg_of_periapsis", bpo::value<std::vector<double> >(), "argument of periapsis of all spacecraft in vector")
-  	//
-  	("x_pos", bpo::value<std::vector<double> >(), "x positon of all spacecraft in vector")
-  	//
-  	("y_pos", bpo::value<std::vector<double> >(), "y position of all spacecraft in vector")
-  	//
-  	("z_pos", bpo::value<std::vector<double> >(), "z position of all spacecraft in vector")
-  	//
-  	("x_veloc", bpo::value<std::vector<double> >(), "x direction velocities of all spacecraft in vector")
-  	//
-  	("y_veloc", bpo::value<std::vector<double> >(), "y direction velocities of all spacecraft in vector")
-  	//
-  	("z_veloc", bpo::value<std::vector<double> >(), "z direction velocities of all spacecraft in vector");
-
-  ///
-  /// @brief Forces options
-  ///
-  bpo::options_description forces_options("Forces Options");
-  forces_options.add_options()
-  	//
-  	("include_Earth_pressure", bpo::value<std::string>()->default_value("no"), "yes or no")
-  	//
-  	("include_solar_pressure", bpo::value<std::string>()->default_value("no"), "yes or no")
-  	//
-  	("include_drag", bpo::value<std::string>()->default_value("no"), "yes or no")
-  	//
-  	("include_Sun_gravity", bpo::value<std::string>()->default_value("no"), "yes or no")
-  	//
-  	("include_Moon_gravity", bpo::value<std::string>()->default_value("no"), "yes or no");
-
-  ///
-  /// @brief Attitude options
-  ///
-  /// \todo should the description list what the components are?
-  ///
-  bpo::options_description attitude_options("Attitude Options");
-  attitude_options.add_options()
-  	//
-  	("attitude_profile", bpo::value<std::string>()->default_value("nadir"), "desired attitude profile")
-  	//
-  	("use angular_velocity_vector", bpo::value<std::string>(), "yes or no")
-  	//
-  	("angular_velocity", bpo::value<std::vector<double> >(), "array of angular velocity components");
-
-  ///
-  /// @brief KALMAN options
-  ///
-  bpo::options_description kalman_options("Kalman Options");
-  kalman_options.add_options()
-  	//
-  	("use_kalman", bpo::value<std::string>()->default_value("no"), "yes or no");
-
-  ///
-  /// @brief Orbit options
-  ///
-  /// \todo Section is incomplete
-  ///
-  bpo::options_description orbit_options("Orbit Options");
-  orbit_options.add_options()
-  	// TODO this is dumb, this should be in the spacecraft section? I think???
-  	("orbit_type", bpo::value<std::string>()->default_value("state_ecef"), "type of orbit");
-
-  ///
-  /// @brief Ground stations options
-  ///
-  bpo::options_description ground_stations_options("Ground Stations Options");
-  ground_stations_options.add_options()
-  	//
-  	("num_ground_stations", bpo::value<int>(), "number of ground stations")
-  	//
-  	("name", bpo::value<std::vector<std::string> >(), "names of all ground stations in vector")
-  	//
-  	("lat", bpo::value<std::vector<double> >(), "latitude of all ground stations in vector")
-  	//
-  	("long", bpo::value<std::vector<double> >(), "longitude of all ground stations in vector")
-  	//
-  	("alt", bpo::value<std::vector<double> >(), "altitude of all ground stations in vector")
-  	//
-  	("min_elev_angle", bpo::value<std::vector<double> >(), "minimum elevation angle of all ground stations");
-
+  // Allowed both on command line and in config file
+  bpo::options_description general_options{"Model parameters"};
+  model_options.add_options()
+  ("spcu", bpo::value<std::string>(), "Input the species network/tree string through command line or a file. Branch lengths of the INPUT are in coalescent unit.")
+  ("spng", bpo::value<std::string>(), "Input the species network/tree string through command line or a file. Branch lengths of the INPUT are in number of generation.")
+  ("pop", bpo::value<double>()->default_value(10000), "Population sizes are defined by a single numerical constant,or a string which specifies the population size on each branch. The string can be input through command line or a file. By default, population size 10,000 is used.")
+  ("mm", bpo::value<int>(), "Multiple merger parameters are defined by a single numerical constant. or a string which speifies the parameter on each branch. The string can be input through command line or a file. By default, Kingman coalescent is used.")
+  ("S", po::value<std::vector<int> >()->multitoken(), "Specify the number of samples for each taxon.")
+  ("num", bpo::value<int>(), "The number of gene trees will be simulated.")
+  ("seed", bpo::value<int>(), "User define random SEED.")
+  ("mu", bpo::value<double>()->default_value(0.00005), "User defined constant mutation rate per locus. By default mutation rate 0.00005 is used.")
+  ("output,o", bpo::value<std::string>()->default_value("OUT"), "Specify the file name prefix for simulated gene trees. Prefix is set as \"OUT\" by default.")
+  // When options are not specified, only output trees with branch lengths are in coalescent unit.
+  ("sim_mut_unit", bpo::bool_switch(&sim_mut_unit_flag), "Convert the simulated gene tree branch lengths to mutation unit.")
+  ("sim_num_gener", bpo::bool_switch(&sim_num_gener_flag), "Convert the simulated gene tree branch lengths to number of generations.")
+  ("sim_num_mut", bpo::bool_switch(&sim_num_mut_flag), "Simulate numbers of mutations on each branch of simulated gene trees.")
+  ("sim_Si_num", bpo::bool_switch(&sim_Si_num_flag), "Generate a table, which includes the number of segregating sites and the total branch length of the gene tree, as well as the TMRCA.")
+  ("f", bpo::bool_switch(&f_flag), "Generate a topology frequency table of a set of input trees or simulated gene trees.")
+  ("gt", bpo::value<std::string>(), "Specify the FILE NAME of trees to analyse tree topology frequencies.")
+  ("seg", bpo::value<std::string>(), "Generate segregating site data.")
+  ("mt", bpo::value<std::string>(), "Specify the FILE NAME of trees to generate segregating site data.")
+  // Tree branch lengths indicate number of mutations on the branch.
+  ("mono", bpo::value<std::string>(), "Generate a frequency table of monophyletic, paraphyletic and polyphyletic trees.")
+  ("spcu", bpo::value<std::string>(), "Input the species network/tree string through command line or a file. Branch lengths of the INPUT are in coalescent unit.")
+  ;
+  //
+  bpo::options_description plot_options{"Plotting options"};
+  plot_options.add_options()
+  ("plot", bpo::bool_switch(&plot_flag), "Use LaTEX(-plot) to draw the input (defined by -spcu) network(tree).")
+  ("dot", bpo::bool_switch(&dot_flag), "Use Dot (-dot) to draw the input (defined by -spcu) network(tree).")
+  ("branch", bpo::bool_switch(&dot_flag), "Branch lengths will be labelled in the figure.")
+;
   bpo::options_description command_line_options;
-  command_line_options.add(generic_options);
+  command_line_options.add(generic_options).add(general_options).add(plot_options);
 
-  bpo::options_description file_options{"General options (command line values will overwrite congif file values)"};
-
-  file_options.add(dependencies_options).add(density_options).add(time_options);
-  file_options.add(spacecraft_options).add(forces_options).add(attitude_options);
-  file_options.add(kalman_options).add(orbit_options);
+  bpo::options_description file_options{"General options (command line values will overwrite config file values)"};
+  file_options.add(general_options).add(model_options).add(other_options);
 
   bpo::variables_map vm;
 

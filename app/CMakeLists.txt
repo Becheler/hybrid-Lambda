@@ -3,7 +3,7 @@ include_directories(hybrid-lambda/include)
 add_executable(hybridlambda main.cpp)
 
 target_link_libraries(hybridlambda
-                      Boost::boost
+                      ${Boost_LIBRARIES}
                     )
 # We need C++ 20 activated with the concepts library
 target_compile_features(hybridlambda PUBLIC cxx_std_20)

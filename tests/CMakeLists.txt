@@ -105,7 +105,7 @@ foreach(testSrc ${TEST_SRCS})
 
         # Link to Boost libraries AND your targets and dependencies
         target_link_libraries(${testName}
-                              CONAN_PKG::boost
+                              ${Boost_LIBRARIES}
                               )
 
         # I like to move testing binaries into a testBin directory
