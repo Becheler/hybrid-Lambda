@@ -32,7 +32,6 @@ auto handle_options(int argc, char* argv[])
   ("help,h", "help screen")
   ("verbose,v", "verbose mode")
   ("version", "software version")
-  ("config", bpo::value<std::string>()->required(), "configuration file")
   ;
   // Allowed both on command line and in config file
   bpo::options_description model_options{"Model parameters"};
@@ -61,7 +60,6 @@ auto handle_options(int argc, char* argv[])
   ("mt", bpo::value<std::string>(), "Specify the FILE NAME of trees to generate segregating site data.")
   // Tree branch lengths indicate number of mutations on the branch.
   ("mono", "Generate a frequency table of monophyletic, paraphyletic and polyphyletic trees.")
-  ("spcu", bpo::value<std::string>(), "Input the species network/tree string through command line or a file. Branch lengths of the INPUT are in coalescent unit.")
   ;
   //
   bpo::options_description plot_options{"Plotting options"};
