@@ -14,12 +14,12 @@ add_test(
 
 add_test(
   NAME test_basic_1
-  COMMAND ${PROJECT_BINARY_DIR}/app/hybridlambda --spcu "((1:1,2:1):1,3:2);" -print
+  COMMAND ${PROJECT_BINARY_DIR}/app/hybridlambda --spcu "((1:1,2:1):1,3:2);" --print
 )
 
 add_test(
   NAME test_basic_2
-  COMMAND ${PROJECT_BINARY_DIR}/app/hybridlambda --spcu "((1:1,2:1):1,3:2);" -print
+  COMMAND ${PROJECT_BINARY_DIR}/app/hybridlambda --spcu "((1:1,2:1):1,3:2);" --print
 )
 
 add_test(
