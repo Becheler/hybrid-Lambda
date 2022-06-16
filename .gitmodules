@@ -1,6 +1,0 @@
-[submodule "src/freq"]
-	path = src/freq
-	url = https://github.com/hybridLambda/freq.git
-[submodule "src/plot"]
-	path = src/plot
-	url = https://github.com/hybridLambda/plot.git
