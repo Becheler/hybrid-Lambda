@@ -1,4 +1,4 @@
-include_directories(hybrid-lambda/include)
+include_directories(hybrid_lambda_lib/include)
 
 add_executable(hybridlambda main.cpp)
 

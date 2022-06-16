@@ -25,8 +25,8 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "src/hybridLambda.hpp"
-#include "src/sim_gt.hpp"
+#include <hybrid_lambda_lib/hybridLambda.hpp>
+#include "hybrid_lambda_lib/sim_gt.hpp"
 
 BOOST_AUTO_TEST_SUITE( assert_not_throws )
 
