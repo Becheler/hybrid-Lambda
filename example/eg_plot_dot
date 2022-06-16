@@ -1,8 +1,0 @@
-echo " Use dot to plot the network"
-../src/hybrid-Lambda -sp_coal_unit ../trees/4_tax_sp_nt1 -dot 
-echo " "
-echo "Use post-order tree traversal to label the interior branches"
-echo " ../src/hybrid-Lambda -sp_coal_unit ../trees/4_tax_sp_nt1 -dot -label"
-echo " "
-echo "Label the branch lengths"
-echo " ../src/hybrid-Lambda -sp_coal_unit ../trees/4_tax_sp_nt1 -dot -branch "

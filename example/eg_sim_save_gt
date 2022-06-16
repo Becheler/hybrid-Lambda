@@ -1,3 +1,0 @@
-# Simulate gene trees from speices tree (networks), and save into files
-
-../src/hybrid-Lambda -sp_coal_unit ../trees/4_tax_sp1 -GENE gene_trees -num 10
