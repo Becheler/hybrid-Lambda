@@ -8,7 +8,7 @@ add_test(
 )
 
 add_test(
-  NAME test_help
+  NAME test_version
   COMMAND ${PROJECT_BINARY_DIR}/app/hybridlambda --version
 )
 
